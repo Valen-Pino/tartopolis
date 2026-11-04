@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { requireParticipant } from "@/lib/auth";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { canDeleteClaim } from "@/lib/claim-permissions";
 
 const postgresUuid = z.string().regex(
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i,
@@ -75,4 +76,28 @@ export async function castVote(formData: FormData) {
   revalidatePath("/");
   revalidatePath("/hazanas");
   revalidatePath("/ranking");
+  revalidatePath("/ranking/[slug]", "page");
+}
+
+export async function deleteClaim(formData: FormData) {
+  const participant = await requireParticipant();
+  const claimId = z.string().uuid().safeParse(formData.get("claimId"));
+  if (!claimId.success) throw new Error("La votación no es válida.");
+
+  const supabase = createAdminClient();
+  const { data: claim, error: lookupError } = await supabase
+    .from("achievement_claims").select("created_by").eq("id", claimId.data).single();
+  if (lookupError || !claim || !canDeleteClaim(participant.id, claim.created_by)) {
+    throw new Error("No podés eliminar esta votación.");
+  }
+  const { error } = await supabase.rpc("delete_achievement_claim", {
+    p_claim_id: claimId.data,
+    p_actor_id: participant.id,
+  });
+  if (error) throw new Error("No pudimos eliminar la votación. Volvé a intentarlo.");
+
+  revalidatePath("/");
+  revalidatePath("/hazanas");
+  revalidatePath("/ranking");
+  revalidatePath("/ranking/[slug]", "page");
 }

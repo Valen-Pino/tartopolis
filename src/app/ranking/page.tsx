@@ -24,7 +24,7 @@ export default async function RankingPage() {
             </div>
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2"><p className="truncate text-lg font-black uppercase tracking-tight">{participant.nickname}</p>{participant.id === viewer.id && <span className="rounded bg-[#332840] px-1.5 py-0.5 text-[0.55rem] font-black uppercase text-[#cbb8e4]">Vos</span>}</div>
-              <p className="truncate text-xs text-[var(--muted)]">{participant.full_name} · {Math.max(0, participant.event_count - 1)} Hazañas</p>
+              <p className="truncate text-xs text-[var(--muted)]">{participant.full_name} · {Math.max(0, participant.event_count - 1)} {Math.max(0, participant.event_count - 1) === 1 ? "Hazaña" : "Hazañas"}</p>
             </div>
             <OvrBadge value={participant.ovr} compact />
             <ChevronRight size={17} className="text-[#555b69]" />

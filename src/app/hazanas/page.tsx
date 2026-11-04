@@ -46,7 +46,7 @@ export default async function AchievementsPage({
       {pending.length > 0 && (
         <div className="mb-9">
           <div className="mb-4 flex items-center justify-between"><h2 className="text-xl font-black uppercase tracking-tight">En votación</h2><span className="rounded-full bg-[#2b2334] px-2.5 py-1 text-xs font-black text-[var(--gold)]">{pending.length}</span></div>
-          <div className="space-y-4">{pending.map((claim) => <ClaimCard key={claim.id} claim={claim} />)}</div>
+          <div className="space-y-4">{pending.map((claim) => <ClaimCard key={claim.id} claim={claim} viewerId={participant.id} />)}</div>
         </div>
       )}
 
@@ -66,7 +66,7 @@ export default async function AchievementsPage({
       {resolved.length > 0 && (
         <div className="mt-9">
           <div className="mb-4 flex items-center gap-2"><Sparkles size={18} className="text-[var(--violet)]" /><h2 className="text-xl font-black uppercase tracking-tight">Últimos veredictos</h2></div>
-          <div className="space-y-4">{resolved.map((claim) => <ClaimCard key={claim.id} claim={claim} />)}</div>
+          <div className="space-y-4">{resolved.map((claim) => <ClaimCard key={claim.id} claim={claim} viewerId={participant.id} />)}</div>
         </div>
       )}
     </section>

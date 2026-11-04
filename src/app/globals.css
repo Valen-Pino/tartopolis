@@ -129,3 +129,59 @@ a {
 
 .score-positive { color: var(--green); }
 .score-negative { color: var(--red); }
+
+.vote-button {
+  display: inline-flex;
+  width: 100%;
+  min-width: 0;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border: 1px solid var(--gold);
+  border-radius: 0.9rem;
+  background: var(--gold);
+  color: #151208;
+  padding: 0.75rem 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.vote-button svg { flex-shrink: 0; }
+.vote-for { background: #123823; border-color: var(--green); color: var(--green); }
+.vote-against { background: #411f25; border-color: var(--red); color: var(--red); }
+.vote-muted { background: #191c23; border-color: #333844; color: #858b98; }
+.vote-button:disabled, .claim-dialog button:disabled { opacity: 0.6; cursor: wait; }
+.vote-button:focus-visible, .delete-claim-button:focus-visible, .dialog-close:focus-visible {
+  outline: 2px solid var(--violet);
+  outline-offset: 3px;
+}
+
+.delete-claim-button, .dialog-close {
+  display: grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  flex-shrink: 0;
+  place-items: center;
+  border: 0;
+  border-radius: 0.75rem;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+}
+.delete-claim-button { margin: -0.6rem -0.6rem 0 0; color: var(--red); }
+.delete-claim-button:hover { background: #411f25; }
+.dialog-close { margin: -0.5rem -0.5rem 0 0; }
+.claim-dialog {
+  width: min(26rem, calc(100% - 2rem));
+  max-height: calc(100dvh - 2rem);
+  margin: auto;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 1.25rem;
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: 0 1.5rem 5rem #0008;
+}
+.claim-dialog::backdrop { background: #000b; backdrop-filter: blur(4px); }

@@ -94,6 +94,23 @@ límites de ingreso y permisos. No usa ni modifica la base real.
 
 Estas reglas están centralizadas en la función SQL `cast_achievement_vote`.
 
+### Eliminación de votaciones
+
+Antes de publicar estos cambios, aplicar `supabase/migrations/007_delete_achievement_claim.sql`
+en el mismo proyecto de Supabase. Cada creador puede eliminar sus votaciones y
+Valentin Pino puede eliminar cualquiera (permiso asociado a su ID estable).
+La operación elimina los votos y revierte los puntos de una votación aprobada
+en una sola transacción. La función solo está disponible para el servidor.
+
+En las Hazañas con puntaje variable, «A FAVOR» abre un modal que exige elegir
+el puntaje antes de confirmar. `pnpm test:hazanas` comprueba permisos, eliminación,
+reversión de OVR y promedio sin modificar la base real.
+
+Aplicar también `supabase/migrations/008_subjective_one_point.sql` para habilitar
++1 en todas las subjetivas positivas y -1 en todas las negativas, incluidas las
+votaciones abiertas. Conserva los votos y resultados existentes. El selector y
+las etiquetas de rango toman estos límites directamente del catálogo.
+
 ## La Tarta del Día
 
 Antes de publicar esta versión, ejecutar `supabase/migrations/003_daily_tart.sql`
