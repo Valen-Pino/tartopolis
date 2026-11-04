@@ -14,7 +14,7 @@ export async function getInvitation(token: string) {
   if (error || !link || link.revoked_at || link.consumed_at || !link.expires_at ||
     new Date(link.expires_at) <= new Date() || !["register", "reset"].includes(link.purpose)) return null;
   const { data: participant } = await supabase.from("participants")
-    .select("id, full_name, nickname, profile_confirmed_at")
+    .select("id, nickname, profile_confirmed_at")
     .eq("id", link.participant_id).eq("is_active", true).single();
   if (!participant) return null;
   return { participant, purpose: link.purpose as "register" | "reset" };

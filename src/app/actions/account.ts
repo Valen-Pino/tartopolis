@@ -15,7 +15,7 @@ const passwordSchema = z.string().min(10).max(128);
 export async function login(_state: AccountState, formData: FormData): Promise<AccountState> {
   const id = participantIdSchema.safeParse(formData.get("participantId"));
   const password = passwordSchema.safeParse(formData.get("password"));
-  if (!id.success || !password.success) return { error: "Seleccioná tu nombre e ingresá tu contraseña (de 10 a 128 caracteres)." };
+  if (!id.success || !password.success) return { error: "Seleccioná tu apodo e ingresá tu contraseña (de 10 a 128 caracteres)." };
   const supabase = createAdminClient();
   const { data: allowed, error: limitError } = await supabase.rpc("allow_login_attempt", { p_participant_id: id.data });
   if (limitError) return { error: "No pudimos iniciar sesión. Intentá nuevamente más tarde." };
@@ -35,7 +35,7 @@ export async function setAccountPassword(token: string, _state: AccountState, fo
   if (!password.success) return { error: "Usá una contraseña de entre 10 y 128 caracteres." };
   if (password.data !== formData.get("confirmation")) return { error: "Las contraseñas no coinciden." };
   const invitation = await getInvitation(token);
-  if (!invitation) return { error: "Esta invitación venció o ya fue utilizada. Pedile un enlace nuevo a Valen." };
+  if (!invitation) return { error: "Esta invitación venció o ya fue utilizada. Pedile un enlace nuevo a Pino." };
   const passwordHash = await hashPassword(password.data);
   // La base valida y consume el enlace en una sola transacción, incluso ante envíos simultáneos.
   const { data, error } = await createAdminClient().rpc("redeem_account_invitation", {

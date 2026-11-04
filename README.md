@@ -11,6 +11,12 @@ votar y acceder a perfiles se requiere una cuenta personal, sin correo electrón
 4. Copiar `.env.example` a `.env.local` y completar las variables.
 5. Ejecutar `pnpm install` y luego `pnpm dev` (Node.js 22.18 o posterior).
 
+«Pedir enlace» usa el número de Pino configurado en la aplicación. Para cambiarlo,
+se puede definir `WHATSAPP_CONTACT_NUMBER` en formato internacional (solo dígitos,
+incluido el código de país). El botón abre su chat de WhatsApp con «Mandame mi
+enlace de Tartópolis.» preparado para que la persona lo envíe. No requiere una
+integración con WhatsApp ni configurar variables adicionales para publicar.
+
 ## Actualizar el sitio existente
 
 1. Aplicar `supabase/migrations/002_password_accounts.sql` en el SQL Editor de
