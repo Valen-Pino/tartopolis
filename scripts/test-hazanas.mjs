@@ -13,6 +13,7 @@ try {
   await db.exec("create role anon; create role authenticated; create role service_role bypassrls;");
   await db.exec((await readFile(new URL("../supabase/migrations/001_initial_schema.sql", import.meta.url), "utf8")).replace("create extension if not exists pgcrypto;", ""));
   await db.exec(await readFile(new URL("../supabase/migrations/007_delete_achievement_claim.sql", import.meta.url), "utf8"));
+  await db.exec(await readFile(new URL("../supabase/migrations/008_fix_limited_achievement_vote.sql", import.meta.url), "utf8"));
   for (const [id, name] of [[CLAIM_MODERATOR_ID, "Pino"], [owner, "Creador"], [other, "Otro"]]) {
     await db.query("insert into participants(id, full_name, nickname, slug) values ($1,$2,$2,$2)", [id, name]);
   }
@@ -40,6 +41,19 @@ try {
   await remove(claimId, CLAIM_MODERATOR_ID);
   assert.equal((await scalar("select ovr from participant_ranking where id=$1", [other])).ovr, 0);
   assert.equal((await scalar("select count(*)::int as n from score_events")).n, 0);
+
+  // El voto que alcanza la mayoría debe funcionar en Hazañas con límite.
+  const limited = await scalar("insert into achievements(slug,title,description,kind,polarity,score_mode,fixed_points,per_person_limit) values ('aporte-casa','Aportar a la casa','Test','objective','positive','fixed',1,5) returning id");
+  const createLimited = async () => (await scalar("insert into achievement_claims(achievement_id,created_by,target_participant_id,details) values ($1,$2,$3,'Aporte de prueba') returning id", [limited.id, owner, other])).id;
+  for (let index = 0; index < 6; index++) {
+    const limitedClaim = await createLimited();
+    await vote(limitedClaim, owner, true);
+    await vote(limitedClaim, CLAIM_MODERATOR_ID, true);
+    const result = await scalar("select status,resolved_points from achievement_claims where id=$1", [limitedClaim]);
+    assert.equal(result.status, index < 5 ? "approved" : "rejected");
+    assert.equal(result.resolved_points, index < 5 ? 1 : null);
+  }
+  assert.equal((await scalar("select ovr from participant_ranking where id=$1", [other])).ovr, 5);
 
   claimId = await create();
   await db.query("update participants set is_active=false where id=$1", [owner]);

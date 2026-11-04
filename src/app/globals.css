@@ -138,10 +138,10 @@ a {
   align-items: center;
   justify-content: center;
   gap: 0.4rem;
-  border: 1px solid var(--gold);
+  border: 1px solid #354f78;
   border-radius: 0.9rem;
-  background: var(--gold);
-  color: #151208;
+  background: #17263e;
+  color: #c3d8fc;
   padding: 0.75rem 0.5rem;
   font-size: 0.8rem;
   font-weight: 900;

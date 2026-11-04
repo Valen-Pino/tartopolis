@@ -54,8 +54,8 @@ export function ClaimControls({ claim, mode }: { claim: Claim; mode: "vote" | "d
     ) : (
       <div className="border-t border-[var(--line)] bg-black/20 p-4" aria-busy={busy}>
         <div className="grid grid-cols-2 gap-2">
-          <button type="button" disabled={busy} aria-pressed={claim.my_vote?.approve === false} onClick={() => submit(false)} className={voteClass(false)}><X size={17} /> EN CONTRA</button>
           <button type="button" disabled={busy} aria-pressed={claim.my_vote?.approve === true} onClick={() => range ? openDialog() : submit(true)} className={voteClass(true)}><Check size={17} /> A FAVOR</button>
+          <button type="button" disabled={busy} aria-pressed={claim.my_vote?.approve === false} onClick={() => submit(false)} className={voteClass(false)}><X size={17} /> EN CONTRA</button>
         </div>
         {error && <p role="alert" className="mt-3 text-sm text-[var(--red)]">{error}</p>}
       </div>

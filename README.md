@@ -94,6 +94,11 @@ límites de ingreso y permisos. No usa ni modifica la base real.
 
 Estas reglas están centralizadas en la función SQL `cast_achievement_vote`.
 
+Aplicar `supabase/migrations/008_fix_limited_achievement_vote.sql` para corregir
+el voto que alcanza la mayoría en Hazañas con límite por persona, como «Aportar
+a la casa». La consulta distingue la columna `status` del parámetro de salida
+del mismo nombre. Conserva los votos y el límite de cinco aportes por persona.
+
 ### Eliminación de votaciones
 
 Antes de publicar estos cambios, aplicar `supabase/migrations/007_delete_achievement_claim.sql`
