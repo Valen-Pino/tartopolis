@@ -49,18 +49,7 @@ try {
   await db.exec("reset role; set role authenticated");
   await assert.rejects(remove(claimId, CLAIM_MODERATOR_ID), /permission denied/);
   await db.exec("reset role");
-  await db.exec(await readFile(new URL("../supabase/migrations/008_subjective_one_point.sql", import.meta.url), "utf8"));
-  // La votación abierta antes de la migración ya admite -1.
-  await vote(claimId, other, true, -1);
-  assert.equal((await scalar("select proposed_points from achievement_votes where claim_id=$1", [claimId])).proposed_points, -1);
-  const positive = await scalar("insert into achievements(slug,title,description,kind,polarity,score_mode,minimum_points,maximum_points) values ('positive','Test','Test','subjective','positive','range',2,5) returning id");
-  await db.exec(await readFile(new URL("../supabase/migrations/008_subjective_one_point.sql", import.meta.url), "utf8"));
-  const positiveClaim = await scalar("insert into achievement_claims(achievement_id,created_by,target_participant_id,details) values ($1,$2,$3,'Prueba positiva') returning id", [positive.id, CLAIM_MODERATOR_ID, other]);
-  await vote(positiveClaim.id, other, true, 1);
-  assert.equal((await scalar("select proposed_points from achievement_votes where claim_id=$1", [positiveClaim.id])).proposed_points, 1);
-  await assert.rejects(vote(positiveClaim.id, CLAIM_MODERATOR_ID, true, -1), /fuera del rango/);
-  await assert.rejects(vote(claimId, CLAIM_MODERATOR_ID, true, 1), /fuera del rango/);
-  console.log("Hazañas: permisos, eliminación, reversión de OVR, promedio y opciones +1/-1 verificados.");
+  console.log("Hazañas: permisos, eliminación, reversión de OVR y promedio verificados.");
 } finally {
   await db.close();
 }

@@ -33,9 +33,9 @@ insert into achievements (slug, title, description, kind, polarity, score_mode, 
   ('no-salir', 'No salir de joda', 'Quedarse durmiendo o viciando en lugar de salir.', 'objective', 'negative', 'fixed', -5, null, null, null, 220),
   ('masturbarse-casa', 'Masturbarse en la casa', 'Penalización objetiva establecida por el reglamento.', 'objective', 'negative', 'fixed', -10, null, null, null, 230),
   ('positivo-leve', 'Accionar positivo leve', 'Hazaña positiva menor, valorada por el grupo.', 'subjective', 'positive', 'range', null, 0, 2, null, 300),
-  ('positivo-remarcable', 'Accionar positivo remarcable', 'Hazaña positiva destacada, valorada por el grupo.', 'subjective', 'positive', 'range', null, 1, 5, null, 310),
+  ('positivo-remarcable', 'Accionar positivo remarcable', 'Hazaña positiva destacada, valorada por el grupo.', 'subjective', 'positive', 'range', null, 2, 5, null, 310),
   ('boludez', 'Boludez', 'Accionar negativo leve, valorado por el grupo.', 'subjective', 'negative', 'range', null, -2, 0, null, 400),
-  ('negativo-grave', 'Accionar negativo grave', 'Accionar grave, valorado por el grupo.', 'subjective', 'negative', 'range', null, -5, -1, null, 410)
+  ('negativo-grave', 'Accionar negativo grave', 'Accionar grave, valorado por el grupo.', 'subjective', 'negative', 'range', null, -5, -2, null, 410)
 on conflict (slug) do update set
   title = excluded.title,
   description = excluded.description,

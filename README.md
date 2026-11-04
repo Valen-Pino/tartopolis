@@ -106,10 +106,6 @@ En las Hazañas con puntaje variable, «A FAVOR» abre un modal que exige elegir
 el puntaje antes de confirmar. `pnpm test:hazanas` comprueba permisos, eliminación,
 reversión de OVR y promedio sin modificar la base real.
 
-Aplicar también `supabase/migrations/008_subjective_one_point.sql` para habilitar
-+1 en todas las subjetivas positivas y -1 en todas las negativas, incluidas las
-votaciones abiertas. Conserva los votos y resultados existentes. El selector y
-las etiquetas de rango toman estos límites directamente del catálogo.
 
 ## La Tarta del Día
 
