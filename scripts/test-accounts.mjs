@@ -72,7 +72,20 @@ try {
     await assert.rejects(redeem("reset", passwordHash), /permission denied/);
     await db.exec("reset role");
   }
-  console.log("OK: contraseñas, migración, invitaciones, consumo único, vencimiento, reset, sesiones, límites y permisos.");
+  const juaniMigration = await readFile(new URL("../supabase/migrations/005_add_juani.sql", import.meta.url), "utf8");
+  await db.exec(juaniMigration);
+  const juani = await scalar("select * from participants where slug='juani'");
+  assert.equal(juani.nickname, "Juani");
+  assert.equal(juani.profile_confirmed_at, null, "el primer ingreso requiere completar el perfil");
+  assert.equal((await scalar("select ovr from participant_ranking where slug='juani'")).ovr, 65);
+  await db.query("update participants set nickname='Mi Apodo' where id=$1", [juani.id]);
+  await db.exec(juaniMigration);
+  assert.equal((await scalar("select nickname from participants where slug='juani'")).nickname, "Mi Apodo", "la migración conserva un apodo elegido");
+  assert.equal((await scalar("select count(*)::integer as n from score_events where source_key='initial-juani'")).n, 1);
+  await issue("juani-invitation", "register", juani.id);
+  assert.equal((await redeem("juani-invitation", passwordHash)).rows.length, 1);
+  assert.equal((await scalar("select profile_confirmed_at from participants where slug='juani'")).profile_confirmed_at, null, "crear contraseña no salta el paso del apodo");
+  console.log("OK: contraseñas, migración, invitaciones, consumo único, vencimiento, reset, sesiones, límites, permisos y alta de Juani.");
 } finally {
   await db.close();
 }

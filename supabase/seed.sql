@@ -10,7 +10,8 @@ insert into participants (id, full_name, nickname, slug) values
   ('10000000-0000-0000-0000-000000000009', 'Tomás Farana', 'Tom', 'tom'),
   ('10000000-0000-0000-0000-000000000010', 'Franco Gatti', 'Abuelo', 'abuelo'),
   ('10000000-0000-0000-0000-000000000011', 'Tobias Martin', 'Linki', 'linki'),
-  ('10000000-0000-0000-0000-000000000012', 'Bautista Petris', 'Baulo', 'baulo')
+  ('10000000-0000-0000-0000-000000000012', 'Bautista Petris', 'Baulo', 'baulo'),
+  ('10000000-0000-0000-0000-000000000013', 'Juani', 'Juani', 'juani')
 on conflict (id) do update set full_name = excluded.full_name, nickname = excluded.nickname, slug = excluded.slug;
 
 update participants set is_active = false where slug = 'baulo';
@@ -60,6 +61,7 @@ insert into score_events (participant_id, source_key, description, points, sourc
   ('10000000-0000-0000-0000-000000000010', 'initial-abuelo', 'Situación inicial', 65, 'initial', '2026-08-21'),
   ('10000000-0000-0000-0000-000000000011', 'initial-linki', 'Situación inicial', 65, 'initial', '2026-08-21'),
   ('10000000-0000-0000-0000-000000000012', 'initial-baulo', 'Situación inicial', 65, 'initial', '2026-08-21'),
+  ('10000000-0000-0000-0000-000000000013', 'initial-juani', 'Situación inicial', 65, 'initial', now()),
   ('10000000-0000-0000-0000-000000000012', 'import-01', 'Tardó en sacar pasaje', -2, 'imported', '2026-08-21 12:01:00-03'),
   ('10000000-0000-0000-0000-000000000004', 'import-02', '“Hay que cerrar la casa esta semana sí o sí”', -2, 'imported', '2026-08-21 12:02:00-03'),
   ('10000000-0000-0000-0000-000000000001', 'import-03', 'Página con cuenta regresiva y leaderboard', 2, 'imported', '2026-08-21 12:03:00-03'),

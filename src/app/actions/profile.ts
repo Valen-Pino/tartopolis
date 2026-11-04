@@ -14,7 +14,10 @@ export async function updateNickname(formData: FormData) {
   if (!participant) redirect("/acceso");
 
   const result = nicknameSchema.safeParse(formData.get("nickname"));
-  if (!result.success) redirect("/perfil?error=nickname");
+  if (!result.success) redirect(participant.profile_confirmed_at ? "/perfil?error=nickname" : "/bienvenida?error=nickname");
+  if (!participant.profile_confirmed_at && participant.slug === "juani" && result.data.toLocaleLowerCase("es") === "juani") {
+    redirect("/bienvenida?error=placeholder");
+  }
 
   const { error } = await createAdminClient()
     .from("participants")
