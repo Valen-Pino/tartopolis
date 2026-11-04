@@ -20,14 +20,14 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             <Link href="/" className="text-lg font-black tracking-[-0.05em] text-white">
               TARTÓPOLIS<span className="text-[var(--gold)]">27</span>
             </Link>
-            {participant && (
+            {participant ? (
               <Link
                 href="/perfil"
                 className="rounded-full border border-[var(--line)] bg-[#151820] px-3 py-2 text-xs font-black uppercase tracking-wide"
               >
                 {participant.nickname}
               </Link>
-            )}
+            ) : <Link href="/acceso" className="rounded-full border border-[var(--line)] bg-[#151820] px-3 py-2 text-xs font-black">Iniciar sesión</Link>}
           </header>
           <main>{children}</main>
           {participant?.profile_confirmed_at && <BottomNav />}

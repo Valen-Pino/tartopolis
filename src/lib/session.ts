@@ -12,8 +12,8 @@ function sessionKey() {
   return new TextEncoder().encode(secret);
 }
 
-export async function createSession(participantId: string) {
-  const token = await new SignJWT({ participantId })
+export async function createSession(participantId: string, sessionVersion: string) {
+  const token = await new SignJWT({ participantId, sessionVersion })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
     .setExpirationTime(`${SESSION_DURATION_SECONDS}s`)
@@ -34,15 +34,15 @@ export async function clearSession() {
   cookieStore.delete(COOKIE_NAME);
 }
 
-export async function getSessionParticipantId() {
+export async function getSessionIdentity() {
   const cookieStore = await cookies();
   const token = cookieStore.get(COOKIE_NAME)?.value;
   if (!token) return null;
 
   try {
-    const { payload } = await jwtVerify(token, sessionKey());
-    return typeof payload.participantId === "string"
-      ? payload.participantId
+    const { payload } = await jwtVerify(token, sessionKey(), { algorithms: ["HS256"] });
+    return typeof payload.participantId === "string" && typeof payload.sessionVersion === "string"
+      ? { participantId: payload.participantId, sessionVersion: payload.sessionVersion }
       : null;
   } catch {
     return null;

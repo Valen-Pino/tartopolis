@@ -5,4 +5,5 @@ node_modules
 .vercel
 .idea
 access-links-*.txt
+invitation-links-*.txt
 *.tsbuildinfo

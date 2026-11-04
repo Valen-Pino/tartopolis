@@ -32,5 +32,6 @@ export async function updateNickname(formData: FormData) {
 
 export async function logout() {
   await clearSession();
-  redirect("/acceso");
+  revalidatePath("/", "layout");
+  redirect("/");
 }
