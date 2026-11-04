@@ -11,7 +11,7 @@ insert into participants (id, full_name, nickname, slug) values
   ('10000000-0000-0000-0000-000000000010', 'Franco Gatti', 'Abuelo', 'abuelo'),
   ('10000000-0000-0000-0000-000000000011', 'Tobias Martin', 'Linki', 'linki'),
   ('10000000-0000-0000-0000-000000000012', 'Bautista Petris', 'Baulo', 'baulo'),
-  ('10000000-0000-0000-0000-000000000013', 'Juani', 'Juani', 'juani')
+  ('10000000-0000-0000-0000-000000000013', 'Juan Ignacio Scarcelli', 'Juani', 'juani')
 on conflict (id) do update set full_name = excluded.full_name, nickname = excluded.nickname, slug = excluded.slug;
 
 update participants set is_active = false where slug = 'baulo';
