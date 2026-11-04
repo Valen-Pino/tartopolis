@@ -13,6 +13,8 @@ insert into participants (id, full_name, nickname, slug) values
   ('10000000-0000-0000-0000-000000000012', 'Bautista Petris', 'Baulo', 'baulo')
 on conflict (id) do update set full_name = excluded.full_name, nickname = excluded.nickname, slug = excluded.slug;
 
+update participants set is_active = false where slug = 'baulo';
+
 insert into achievements (slug, title, description, kind, polarity, score_mode, fixed_points, minimum_points, maximum_points, per_person_limit, sort_order) values
   ('tartear', 'Tartear en la jodita o after', 'Concretar un tarteo durante la jodita o el after.', 'objective', 'positive', 'fixed', 2, null, null, null, 10),
   ('atraer-after', 'Atraer gente al after', 'Persuadir a una persona para que vaya al after. Se asigna por cada persona atraída.', 'objective', 'positive', 'fixed', 1, null, null, null, 20),

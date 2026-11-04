@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { Home, Medal, Sparkles } from "lucide-react";
+import { CakeSlice, Home, Medal, Sparkles } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 const items = [
   { href: "/", label: "Inicio", icon: Home },
   { href: "/ranking", label: "Ranking", icon: Medal },
   { href: "/hazanas", label: "Hazañas", icon: Sparkles },
+  { href: "/tarta-del-dia", label: "La Tarta del Día", icon: CakeSlice },
 ];
 
 export function BottomNav() {
@@ -21,7 +22,7 @@ export function BottomNav() {
           <Link
             key={href}
             href={href}
-            className={`flex flex-1 flex-col items-center gap-1 rounded-xl py-2 text-[0.68rem] font-black uppercase tracking-wide transition ${
+            className={`flex min-w-0 flex-1 flex-col items-center justify-center gap-1 rounded-xl px-1 py-2 text-center text-[0.62rem] font-black uppercase tracking-wide transition ${
               active ? "bg-[#24202e] text-[var(--gold)]" : "text-[#777d8d]"
             }`}
           >

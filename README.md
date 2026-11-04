@@ -86,10 +86,43 @@ límites de ingreso y permisos. No usa ni modifica la base real.
 
 ## Reglas de votación
 
-- Los 12 participantes pueden votar, incluidos acusador y acusado.
+- Todos los participantes activos pueden votar, incluidos acusador y acusado.
 - Una Hazaña se aprueba cuando obtiene más de la mitad de los participantes activos.
 - Se rechaza cuando ya no es matemáticamente posible alcanzar esa mayoría.
 - En Hazañas variables, el puntaje final es el promedio redondeado de los puntajes
   propuestos por los votos favorables.
 
 Estas reglas están centralizadas en la función SQL `cast_achievement_vote`.
+
+## La Tarta del Día
+
+Antes de publicar esta versión, ejecutar `supabase/migrations/003_daily_tart.sql`
+en el SQL Editor del mismo proyecto de Supabase. Crea las tablas de imágenes y
+elecciones diarias y el bucket privado `daily-tarts`. No ejecutar el seed ni
+agregar políticas públicas al bucket. No requiere nuevas variables de entorno.
+
+El módulo `/tarta-del-dia`, las subidas y los archivos requieren una sesión válida
+y un perfil confirmado. Los archivos se sirven desde una ruta que verifica la
+sesión, sin URLs públicas ni caché compartido.
+
+Se aceptan JPG, PNG, WebP, GIF y AVIF de hasta 4 MB y 40 millones de píxeles. Se
+verifica su contenido y se convierten a WebP de hasta 2000 × 2000, sin ampliar
+imágenes pequeñas. Se eliminan metadatos; de las animaciones se guarda el primer
+cuadro. El selector sube una imagen por vez.
+
+La primera visita de cada día elige una imagen y guarda la elección, usando la
+fecha de Argentina. No necesita una tarea programada: los días sin visitas no
+consumen imágenes. Todos ven la misma elección ese día, incluso si se suben más
+imágenes. Una página abierta comprueba el cambio de fecha cada 15 segundos y al
+recuperar el foco.
+
+La elección usa el menor contador de selecciones y desempata al azar, excluyendo
+la imagen de ayer cuando hay otra disponible. Esta exclusión tiene prioridad
+sobre el contador si las imágenes nuevas generan contadores desparejos. Cada
+elección suma uno; las visitas no lo modifican. Las subidas comienzan en cero.
+Un bloqueo dentro de la transacción evita elecciones distintas por solicitudes
+simultáneas. Si aún no hay imágenes, el día queda disponible para la primera
+subida.
+
+`pnpm test:tarts` comprueba la rotación, la prioridad de imágenes nuevas, el
+contador diario, los permisos y la validación de archivos, sin tocar la base real.

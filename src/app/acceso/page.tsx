@@ -21,7 +21,7 @@ export default async function AccessPage({ searchParams }: { searchParams: Promi
       {reason && <p role="status" className="mt-4 rounded-xl border border-amber-800 p-3 text-sm text-amber-200">Los enlaces anteriores ya no permiten ingresar. Si todavía no tenés contraseña, pedile tu invitación nueva a Pino.</p>}
       {configured && !error ? <LoginForm participants={participants ?? []} /> : <p className="mt-6 text-sm text-amber-200">El acceso no está disponible en este momento. Intentá nuevamente más tarde.</p>}
       <Link href="/registro" className="secondary-button mt-4 w-full">Crear cuenta</Link>
-      <p className="mt-5 text-xs leading-5 text-[var(--muted)]">Si no recordás tu contraseña, contactá a Pino para que te restablezca el acceso.</p>
+      <p className="mt-5 text-center text-xs leading-5 text-[var(--muted)]">Si no recordás tu contraseña, contactá a Pino para que te restablezca el acceso.</p>
       <Link href="/" className="secondary-button mt-3 w-full">Volver al inicio</Link>
     </section>
   );

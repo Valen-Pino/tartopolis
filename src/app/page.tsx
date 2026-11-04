@@ -59,7 +59,7 @@ export default async function HomePage() {
             </Link>
           ))}
         </div>
-        {participant ? <Link href="/ranking" className="secondary-button mt-4 w-full">Ver ranking completo <ArrowRight size={17} /></Link> : <p className="mt-4 text-xs text-[var(--muted)]">Iniciá sesión para ver el historial de cada participante.</p>}
+        {participant ? <Link href="/ranking" className="secondary-button mt-4 w-full">Ver ranking completo <ArrowRight size={17} /></Link> : <p className="mt-4 text-center text-xs text-[var(--muted)]">Iniciá sesión para ver el historial de cada participante.</p>}
       </section>
     </div>
   );
