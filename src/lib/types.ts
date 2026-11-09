@@ -47,7 +47,7 @@ export type Claim = {
   resolved_points: number | null;
   created_at: string;
   achievement: Achievement;
-  creator: Pick<Participant, "id" | "nickname">;
+  creator: Pick<Participant, "id" | "nickname" | "slug">;
   target: Pick<Participant, "id" | "nickname" | "slug">;
   my_vote?: {
     approve: boolean;

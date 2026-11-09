@@ -21,7 +21,7 @@ export function ClaimCard({ claim, viewerId }: { claim: Claim; viewerId: string 
         {claim.scoring_inputs?.women !== undefined && <p className="mt-3 text-sm text-[var(--muted)]">Minas: {claim.scoring_inputs.women} · Pibes: {claim.scoring_inputs.men}</p>}
         {optionsFor(achievement.slug).some(({ key }) => claim.scoring_inputs?.[key]) && <p className="mt-3 text-sm text-[var(--muted)]">{optionsFor(achievement.slug).filter(({ key }) => claim.scoring_inputs?.[key]).map(({ label }) => label).join(" · ")}</p>}
         <p className="mt-3 text-sm leading-5 text-[#c2c5ce]">{claim.details}</p>
-        <p className="mt-4 text-xs text-[var(--muted)]"><Link className="font-black text-white" href={`/ranking/${claim.target.slug}`}>{claim.target.nickname}</Link> fue señalado por <span className="font-bold text-white">{claim.creator.nickname}</span></p>
+        <p className="mt-4 text-xs text-[var(--muted)]"><Link className="font-black text-white hover:underline" href={`/ranking/${claim.target.slug}`}>{claim.target.nickname}</Link> fue señalado por <Link className="font-bold text-white hover:underline" href={`/ranking/${claim.creator.slug}`}>{claim.creator.nickname}</Link></p>
 
         <div className="mt-4 grid grid-cols-2 gap-2">
           <div className="rounded-lg bg-[#10261b] px-3 py-2 text-xs font-bold text-[var(--green)]"><Check className="mr-1 inline" size={14} /> {claim.approval_count} a favor</div>

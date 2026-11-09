@@ -83,7 +83,7 @@ export async function getClaims(viewerId: string) {
       id, details, status, assigned_points, scoring_inputs, eligible_voters, approval_count, rejection_count,
       resolved_points, created_at,
       achievement:achievements(*),
-      creator:participants!achievement_claims_created_by_fkey(id, nickname),
+      creator:participants!achievement_claims_created_by_fkey(id, nickname, slug),
       target:participants!achievement_claims_target_participant_id_fkey(id, nickname, slug)
     `)
     .order("created_at", { ascending: false });
