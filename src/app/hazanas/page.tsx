@@ -26,7 +26,7 @@ export default async function AchievementsPage({
 
   return (
     <section className="pb-3">
-      <PageHeading title="Hazañas" description="Señalá una acción, elegí a quién corresponde y dejá que el grupo dé su veredicto." />
+      <PageHeading title="Hazañas" />
 
       {query.error && notices[query.error] && (
         <p className="mb-5 rounded-xl border border-red-900/70 bg-red-950/35 p-4 text-sm font-bold text-red-200">

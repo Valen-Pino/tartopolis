@@ -11,7 +11,7 @@ export default async function RankingPage() {
 
   return (
     <section className="pb-3">
-      <PageHeading title="RANKING" description="Cada punto tiene una historia. Tocá un participante para ver todas sus Hazañas." />
+      <PageHeading title="RANKING" />
       <div className="space-y-2">
         {ranking.map((participant) => (
           <Link

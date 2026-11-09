@@ -45,3 +45,12 @@ export function catalogPointsLabel(achievement: { slug: string; polarity: string
   if (achievement.slug === "atraer-after" || isCustom(achievement.slug)) return achievement.polarity === "positive" ? "+" : "-";
   return formatPoints(achievement.fixed_points ?? 0);
 }
+
+export function pointOptions(achievement: { minimum_points: number | null; maximum_points: number | null; polarity: string }) {
+  const minimum = achievement.minimum_points;
+  const maximum = achievement.maximum_points;
+  if (minimum === null || maximum === null) return [];
+  return Array.from({ length: maximum - minimum + 1 }, (_, index) =>
+    achievement.polarity === "negative" ? maximum - index : minimum + index,
+  );
+}

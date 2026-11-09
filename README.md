@@ -92,7 +92,7 @@ límites de ingreso y permisos. No usa ni modifica la base real.
 - Todos los participantes activos pueden votar, incluidos acusador y acusado.
 - Una Hazaña se aprueba cuando obtiene más de la mitad de los participantes activos.
 - Se rechaza cuando ya no es matemáticamente posible alcanzar esa mayoría.
-- En Custom Positivo (+1 a +10) y Custom Negativo (-1 a -10), quien abre la
+- En Custom Positiva (+1 a +10) y Custom Negativa (-1 a -10), quien abre la
   votación elige el puntaje. Los demás votan a favor o en contra de ese monto.
   Las votaciones antiguas sin puntaje asignado conservan su promedio de votos.
 - Atraer gente al after se calcula al acusar: `max(0, Minas - Pibes)`.

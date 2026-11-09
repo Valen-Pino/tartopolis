@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFile, readdir } from 'node:fs/promises';
 import { PGlite } from '@electric-sql/pglite';
 import { withRankPositions } from '../src/lib/ranking.ts';
-import { catalogPointsLabel } from '../src/lib/achievement-scoring.ts';
+import { catalogPointsLabel, pointOptions } from '../src/lib/achievement-scoring.ts';
 
 assert.deepEqual(withRankPositions([80,75,75,70].map(ovr=>({ovr}))).map(p=>p.position),[1,2,2,4]);
 assert.deepEqual(withRankPositions([75,75,70,70,65].map(ovr=>({ovr}))).map(p=>p.position),[1,1,3,3,5]);
@@ -10,6 +10,9 @@ assert.deepEqual(withRankPositions([]),[]);
 assert.equal(catalogPointsLabel({slug:'custom-positiva',polarity:'positive',fixed_points:null}),'+');
 assert.equal(catalogPointsLabel({slug:'custom-negativa',polarity:'negative',fixed_points:null}),'-');
 assert.equal(catalogPointsLabel({slug:'atraer-after',polarity:'positive',fixed_points:0}),'+');
+assert.deepEqual(pointOptions({minimum_points:1,maximum_points:10,polarity:'positive'}),[1,2,3,4,5,6,7,8,9,10]);
+assert.deepEqual(pointOptions({minimum_points:-10,maximum_points:-1,polarity:'negative'}),[-1,-2,-3,-4,-5,-6,-7,-8,-9,-10]);
+assert.deepEqual(pointOptions({minimum_points:-2,maximum_points:0,polarity:'negative'}),[0,-1,-2]);
 const db=new PGlite();
 const dir=new URL('../supabase/migrations/',import.meta.url);
 const files=await readdir(dir);

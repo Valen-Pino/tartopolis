@@ -3,6 +3,7 @@
 import { useId, useRef, useState, useTransition } from "react";
 import { Check, Trash2, X } from "lucide-react";
 import { castVote, deleteClaim } from "@/app/actions/hazanas";
+import { pointOptions } from "@/lib/achievement-scoring";
 import type { Claim } from "@/lib/types";
 
 export function ClaimControls({ claim, mode }: { claim: Claim; mode: "vote" | "delete" }) {
@@ -13,10 +14,7 @@ export function ClaimControls({ claim, mode }: { claim: Claim; mode: "vote" | "d
   const achievement = claim.achievement;
   const range = achievement.score_mode === "range" && claim.assigned_points === null;
   const negative = achievement.polarity === "negative";
-  const values = range ? Array.from(
-    { length: (achievement.maximum_points ?? 0) - (achievement.minimum_points ?? 0) + 1 },
-    (_, index) => negative ? (achievement.maximum_points ?? 0) - index : (achievement.minimum_points ?? 0) + index,
-  ) : [];
+  const values = range ? pointOptions(achievement) : [];
 
   function openDialog() {
     setError(null);

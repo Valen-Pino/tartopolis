@@ -23,13 +23,13 @@ insert into achievements (slug, title, description, kind, polarity, score_mode, 
   ('generar-anecdota', 'Generar Anécdota', '', 'objective', 'positive', 'fixed', 2, null, null, null, 40),
   ('aporte-casa', 'Aportar a la casa', '', 'objective', 'positive', 'fixed', 1, null, null, 5, 50),
   ('atraer-after', 'Atraer gente al after', '', 'objective', 'positive', 'fixed', 0, null, null, null, 60),
-  ('custom-positiva', 'Custom Positivo', '', 'subjective', 'positive', 'range', null, 1, 10, null, 70),
+  ('custom-positiva', 'Custom Positiva', '', 'subjective', 'positive', 'range', null, 1, 10, null, 70),
   ('tirar-mala', 'Tirar la mala', '', 'objective', 'negative', 'fixed', -1, null, null, null, 200),
   ('estar-careta', 'Estar Careta', '', 'objective', 'negative', 'fixed', -1, null, null, null, 210),
   ('dormir-after', 'Dormirse en el After', '', 'objective', 'negative', 'fixed', -2, null, null, null, 220),
   ('no-salir', 'No salir de joda', '', 'objective', 'negative', 'fixed', -5, null, null, null, 230),
   ('masturbarse-casa', 'Masturbarse en Casa', '', 'objective', 'negative', 'fixed', -5, null, null, null, 240),
-  ('custom-negativa', 'Custom Negativo', '', 'subjective', 'negative', 'range', null, -10, -1, null, 300)
+  ('custom-negativa', 'Custom Negativa', '', 'subjective', 'negative', 'range', null, -10, -1, null, 300)
 on conflict (slug) do update set
   title = excluded.title, description = excluded.description, kind = excluded.kind,
   polarity = excluded.polarity, score_mode = excluded.score_mode,
