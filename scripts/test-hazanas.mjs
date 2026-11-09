@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readFile, readdir } from "node:fs/promises";
 import { PGlite } from "@electric-sql/pglite";
 import { canDeleteClaim, CLAIM_MODERATOR_ID } from "../src/lib/claim-permissions.ts";
 
@@ -14,6 +14,9 @@ try {
   await db.exec((await readFile(new URL("../supabase/migrations/001_initial_schema.sql", import.meta.url), "utf8")).replace("create extension if not exists pgcrypto;", ""));
   await db.exec(await readFile(new URL("../supabase/migrations/007_delete_achievement_claim.sql", import.meta.url), "utf8"));
   await db.exec(await readFile(new URL("../supabase/migrations/008_fix_limited_achievement_vote.sql", import.meta.url), "utf8"));
+  const migrationDir = new URL("../supabase/migrations/", import.meta.url);
+  const interactiveMigration = (await readdir(migrationDir)).find((name) => name.endsWith("_interactive_achievements.sql"));
+  await db.exec(await readFile(new URL(interactiveMigration, migrationDir), "utf8"));
   for (const [id, name] of [[CLAIM_MODERATOR_ID, "Pino"], [owner, "Creador"], [other, "Otro"]]) {
     await db.query("insert into participants(id, full_name, nickname, slug) values ($1,$2,$2,$2)", [id, name]);
   }

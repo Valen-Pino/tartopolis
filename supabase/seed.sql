@@ -17,35 +17,24 @@ on conflict (id) do update set full_name = excluded.full_name, nickname = exclud
 update participants set is_active = false where slug = 'baulo';
 
 insert into achievements (slug, title, description, kind, polarity, score_mode, fixed_points, minimum_points, maximum_points, per_person_limit, sort_order) values
-  ('tartear', 'Tartear en la jodita o after', 'Concretar un tarteo durante la jodita o el after.', 'objective', 'positive', 'fixed', 2, null, null, null, 10),
-  ('atraer-after', 'Atraer gente al after', 'Persuadir a una persona para que vaya al after. Se asigna por cada persona atraída.', 'objective', 'positive', 'fixed', 1, null, null, null, 20),
-  ('detonacion', 'Detonación', 'Encuentro sexual según el reglamento. No se acumula con acciones menores sobre la misma persona.', 'objective', 'positive', 'fixed', 5, null, null, null, 30),
-  ('felattio', 'Felattio', 'Encuentro contemplado por el reglamento.', 'objective', 'positive', 'fixed', 3, null, null, null, 40),
-  ('detonacion-visitante', 'Detonación de visitante', 'Adicional por concretar el encuentro fuera de la casa.', 'objective', 'positive', 'fixed', 2, null, null, null, 50),
-  ('adicional-pau', 'Adicional por PAU', 'Adicional previsto por el reglamento.', 'objective', 'positive', 'fixed', 1, null, null, null, 60),
-  ('infidelidad-tarteo', 'Infidelidad: tarteo', 'Tarteo siendo infiel a la pareja.', 'objective', 'positive', 'fixed', 7, null, null, null, 70),
-  ('infidelidad-detonacion', 'Infidelidad: detonación', 'Detonación siendo infiel a la pareja.', 'objective', 'positive', 'fixed', 15, null, null, null, 80),
-  ('gestionar-contratacion', 'Gestionar una contratación', 'Puntaje por persona contratada para quien realizó la gestión.', 'objective', 'positive', 'fixed', 1, null, null, null, 90),
-  ('encuentro-grupal', 'Encuentro grupal', 'Base por encuentro con más de una persona. Los adicionales se registran por separado.', 'objective', 'positive', 'fixed', 2, null, null, null, 100),
-  ('aporte-casa', 'Aportar a la casa', 'Cocinar, lavar platos, ordenar espacios comunes o hacer compras por iniciativa propia. Máximo cinco por persona.', 'objective', 'positive', 'fixed', 1, null, null, 5, 110),
-  ('tirar-mala', 'Tirar la mala', 'Cada ocasión resta un punto, sin límite.', 'objective', 'negative', 'fixed', -1, null, null, null, 200),
-  ('dormir-after', 'Dormirse o viciar en el after', 'Irse a dormir en pleno after o ponerse a jugar a la consola.', 'objective', 'negative', 'fixed', -2, null, null, null, 210),
-  ('no-salir', 'No salir de joda', 'Quedarse durmiendo o viciando en lugar de salir.', 'objective', 'negative', 'fixed', -5, null, null, null, 220),
-  ('masturbarse-casa', 'Masturbarse en la casa', 'Penalización objetiva establecida por el reglamento.', 'objective', 'negative', 'fixed', -10, null, null, null, 230),
-  ('positivo-leve', 'Accionar positivo leve', 'Hazaña positiva menor, valorada por el grupo.', 'subjective', 'positive', 'range', null, 0, 2, null, 300),
-  ('positivo-remarcable', 'Accionar positivo remarcable', 'Hazaña positiva destacada, valorada por el grupo.', 'subjective', 'positive', 'range', null, 2, 5, null, 310),
-  ('boludez', 'Boludez', 'Accionar negativo leve, valorado por el grupo.', 'subjective', 'negative', 'range', null, -2, 0, null, 400),
-  ('negativo-grave', 'Accionar negativo grave', 'Accionar grave, valorado por el grupo.', 'subjective', 'negative', 'range', null, -5, -2, null, 410)
+  ('detonacion', 'Detonación', '', 'objective', 'positive', 'fixed', 5, null, null, null, 10),
+  ('felattio', 'Felattio', '', 'objective', 'positive', 'fixed', 3, null, null, null, 20),
+  ('tartear', 'Tartear en la Jodita o After', '', 'objective', 'positive', 'fixed', 2, null, null, null, 30),
+  ('generar-anecdota', 'Generar Anécdota', '', 'objective', 'positive', 'fixed', 2, null, null, null, 40),
+  ('aporte-casa', 'Aportar a la casa', '', 'objective', 'positive', 'fixed', 1, null, null, 5, 50),
+  ('atraer-after', 'Atraer gente al after', '', 'objective', 'positive', 'fixed', 0, null, null, null, 60),
+  ('custom-positiva', 'Custom', '', 'subjective', 'positive', 'range', null, 1, 10, null, 70),
+  ('tirar-mala', 'Tirar la mala', '', 'objective', 'negative', 'fixed', -1, null, null, null, 200),
+  ('estar-careta', 'Estar Careta', '', 'objective', 'negative', 'fixed', -1, null, null, null, 210),
+  ('dormir-after', 'Dormirse en el After', '', 'objective', 'negative', 'fixed', -2, null, null, null, 220),
+  ('no-salir', 'No salir de joda', '', 'objective', 'negative', 'fixed', -5, null, null, null, 230),
+  ('masturbarse-casa', 'Masturbarse en Casa', '', 'objective', 'negative', 'fixed', -5, null, null, null, 240),
+  ('custom-negativa', 'Custom', '', 'subjective', 'negative', 'range', null, -10, -1, null, 300)
 on conflict (slug) do update set
-  title = excluded.title,
-  description = excluded.description,
-  kind = excluded.kind,
-  polarity = excluded.polarity,
-  score_mode = excluded.score_mode,
-  fixed_points = excluded.fixed_points,
-  minimum_points = excluded.minimum_points,
-  maximum_points = excluded.maximum_points,
-  per_person_limit = excluded.per_person_limit,
+  title = excluded.title, description = excluded.description, kind = excluded.kind,
+  polarity = excluded.polarity, score_mode = excluded.score_mode,
+  fixed_points = excluded.fixed_points, minimum_points = excluded.minimum_points,
+  maximum_points = excluded.maximum_points, per_person_limit = excluded.per_person_limit,
   sort_order = excluded.sort_order;
 
 insert into score_events (participant_id, source_key, description, points, source_kind, occurred_at) values

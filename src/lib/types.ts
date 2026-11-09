@@ -1,3 +1,5 @@
+import type { ScoringInputs } from "./achievement-scoring";
+
 export type Participant = {
   id: string;
   full_name: string;
@@ -37,6 +39,8 @@ export type Claim = {
   id: string;
   details: string;
   status: "pending" | "approved" | "rejected" | "cancelled";
+  assigned_points: number | null;
+  scoring_inputs: ScoringInputs;
   eligible_voters: number;
   approval_count: number;
   rejection_count: number;

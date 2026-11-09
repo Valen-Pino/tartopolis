@@ -7,3 +7,4 @@ node_modules
 access-links-*.txt
 invitation-links-*.txt
 *.tsbuildinfo
+supabase/.temp/

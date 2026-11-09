@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { requireParticipant } from "@/lib/auth";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { hasAdditionalPoints, optionsFor, type ScoringInputs } from "@/lib/achievement-scoring";
 import { canDeleteClaim } from "@/lib/claim-permissions";
 
 const postgresUuid = z.string().regex(
@@ -30,15 +31,32 @@ export async function createClaim(formData: FormData) {
   const supabase = createAdminClient();
   const [{ count }, { data: achievement }] = await Promise.all([
     supabase.from("participants").select("id", { count: "exact", head: true }).eq("is_active", true),
-    supabase.from("achievements").select("id").eq("id", result.data.achievementId).eq("is_active", true).single(),
+    supabase.from("achievements").select("id, slug").eq("id", result.data.achievementId).eq("is_active", true).single(),
   ]);
   if (!achievement) redirect("/hazanas?error=achievement");
+
+  const scoringInputs: ScoringInputs = {};
+  if (achievement.slug === "atraer-after") {
+    for (const key of ["women", "men"] as const) {
+      const value = formData.get(key);
+      if (typeof value !== "string" || !/^\d{1,7}$/.test(value) || Number(value) > 1000000) {
+        redirect("/hazanas?error=claim");
+      }
+      scoringInputs[key] = Number(value);
+    }
+  } else if (hasAdditionalPoints(achievement.slug)) {
+    for (const { key } of optionsFor(achievement.slug)) scoringInputs[key] = formData.get(key) === "on";
+    // Reject forbidden extras even when a request bypasses the form.
+    if ((achievement.slug === "tartear" && formData.has("visiting")) ||
+        (achievement.slug !== "detonacion" && formData.has("trio"))) redirect("/hazanas?error=claim");
+  }
 
   const { error } = await supabase.from("achievement_claims").insert({
     achievement_id: result.data.achievementId,
     created_by: participant.id,
     target_participant_id: result.data.targetId,
     details: result.data.details,
+    scoring_inputs: scoringInputs,
     eligible_voters: count ?? 0,
   });
   if (error) throw error;
@@ -63,8 +81,9 @@ export async function castVote(formData: FormData) {
   if (!result.success) redirect("/hazanas?error=vote");
 
   const proposed = result.data.proposedPoints?.length
-    ? Number.parseInt(result.data.proposedPoints, 10)
+    ? Number(result.data.proposedPoints)
     : null;
+  if (proposed !== null && !Number.isInteger(proposed)) redirect("/hazanas?error=vote");
   const { error } = await createAdminClient().rpc("cast_achievement_vote", {
     p_claim_id: result.data.claimId,
     p_voter_id: participant.id,

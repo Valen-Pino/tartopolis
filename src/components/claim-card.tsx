@@ -2,9 +2,11 @@ import Link from "next/link";
 import { Check, X } from "lucide-react";
 import { ClaimControls } from "@/components/claim-controls";
 import { canDeleteClaim } from "@/lib/claim-permissions";
+import { formatPoints, optionsFor } from "@/lib/achievement-scoring";
 import type { Claim } from "@/lib/types";
 
 function pointsLabel(claim: Claim) {
+  if (claim.assigned_points !== null && claim.assigned_points !== undefined) return `${formatPoints(claim.assigned_points)} OVR`;
   const item = claim.achievement;
   if (item.score_mode === "fixed") return `${(item.fixed_points ?? 0) > 0 ? "+" : ""}${item.fixed_points} OVR`;
   return `${(item.minimum_points ?? 0) > 0 ? "+" : ""}${item.minimum_points} a ${(item.maximum_points ?? 0) > 0 ? "+" : ""}${item.maximum_points} OVR`;
@@ -27,6 +29,8 @@ export function ClaimCard({ claim, viewerId }: { claim: Claim; viewerId: string 
           </div>
           {canDeleteClaim(viewerId, claim.creator.id) ? <ClaimControls claim={claim} mode="delete" /> : !pending && (claim.status === "approved" ? <Check className="shrink-0 text-[var(--green)]" /> : <X className="shrink-0 text-[var(--red)]" />)}
         </div>
+        {claim.scoring_inputs?.women !== undefined && <p className="mt-3 text-sm text-[var(--muted)]">Minas: {claim.scoring_inputs.women} · Pibes: {claim.scoring_inputs.men}</p>}
+        {optionsFor(achievement.slug).some(({ key }) => claim.scoring_inputs?.[key]) && <p className="mt-3 text-sm text-[var(--muted)]">{optionsFor(achievement.slug).filter(({ key }) => claim.scoring_inputs?.[key]).map(({ label }) => label).join(" · ")}</p>}
         <p className="mt-3 text-sm leading-5 text-[#c2c5ce]">{claim.details}</p>
         <p className="mt-4 text-xs text-[var(--muted)]"><Link className="font-black text-white" href={`/ranking/${claim.target.slug}`}>{claim.target.nickname}</Link> fue señalado por <span className="font-bold text-white">{claim.creator.nickname}</span></p>
 

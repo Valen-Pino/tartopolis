@@ -15,7 +15,7 @@ export function ClaimControls({ claim, mode }: { claim: Claim; mode: "vote" | "d
   const negative = achievement.polarity === "negative";
   const values = range ? Array.from(
     { length: (achievement.maximum_points ?? 0) - (achievement.minimum_points ?? 0) + 1 },
-    (_, index) => (achievement.minimum_points ?? 0) + index,
+    (_, index) => negative ? (achievement.maximum_points ?? 0) - index : (achievement.minimum_points ?? 0) + index,
   ) : [];
 
   function openDialog() {

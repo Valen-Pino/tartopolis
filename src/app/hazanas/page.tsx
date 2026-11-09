@@ -55,8 +55,8 @@ export default async function AchievementsPage({
         <div className="space-y-2">
           {achievements.map((achievement) => (
             <Link key={achievement.id} href={`/hazanas/nueva/${achievement.slug}`} className="card flex items-center gap-3 p-4">
-              <div className={`grid h-11 w-14 shrink-0 place-items-center rounded-lg text-sm font-black ${achievement.polarity === "positive" ? "bg-[#173725] text-[var(--green)]" : "bg-[#411f25] text-[var(--red)]"}`}>{pointsLabel(achievement.fixed_points, achievement.minimum_points, achievement.maximum_points)}</div>
-              <div className="min-w-0 flex-1"><p className="font-black uppercase tracking-tight">{achievement.title}</p><p className="mt-1 truncate text-xs text-[var(--muted)]">{achievement.description}</p></div>
+              <div className={`grid h-11 w-14 shrink-0 place-items-center rounded-lg text-sm font-black ${achievement.polarity === "positive" ? "bg-[#173725] text-[var(--green)]" : "bg-[#411f25] text-[var(--red)]"}`}>{achievement.slug === "atraer-after" ? "Variable" : pointsLabel(achievement.fixed_points, achievement.minimum_points, achievement.maximum_points)}</div>
+              <div className="min-w-0 flex-1"><p className="font-black uppercase tracking-tight">{achievement.title}</p></div>
               <ArrowRight size={17} className="shrink-0 text-[#626876]" />
             </Link>
           ))}

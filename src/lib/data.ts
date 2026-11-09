@@ -62,6 +62,8 @@ type RawClaim = {
   id: string;
   details: string;
   status: Claim["status"];
+  assigned_points: number | null;
+  scoring_inputs: Claim["scoring_inputs"];
   eligible_voters: number;
   approval_count: number;
   rejection_count: number;
@@ -77,7 +79,7 @@ export async function getClaims(viewerId: string) {
   const { data, error } = await supabase
     .from("achievement_claims")
     .select(`
-      id, details, status, eligible_voters, approval_count, rejection_count,
+      id, details, status, assigned_points, scoring_inputs, eligible_voters, approval_count, rejection_count,
       resolved_points, created_at,
       achievement:achievements(*),
       creator:participants!achievement_claims_created_by_fkey(id, nickname),

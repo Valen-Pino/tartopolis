@@ -77,6 +77,8 @@ vence o se pierde, se puede emitir otro. No hay flujo automático de recuperaci�
 pnpm lint
 pnpm typecheck
 pnpm test:accounts
+pnpm test:hazanas
+pnpm test:achievement-scoring
 pnpm build
 ```
 
@@ -89,8 +91,15 @@ límites de ingreso y permisos. No usa ni modifica la base real.
 - Todos los participantes activos pueden votar, incluidos acusador y acusado.
 - Una Hazaña se aprueba cuando obtiene más de la mitad de los participantes activos.
 - Se rechaza cuando ya no es matemáticamente posible alcanzar esa mayoría.
-- En Hazañas variables, el puntaje final es el promedio redondeado de los puntajes
-  propuestos por los votos favorables.
+- En Custom positiva (+1 a +10) y Custom negativa (-1 a -10), el puntaje final
+  es el promedio redondeado de los puntajes propuestos por los votos favorables.
+- Atraer gente al after se calcula al acusar: `max(0, Minas - Pibes)`.
+- Tarteo (+2), Detonación (+5) y Felattio (+3) admiten Tiene Pau (+10) e
+  Infidelidad (+4). De Visitante (+2) solo está disponible en Detonación y
+  Felattio; Trío (+2), únicamente en Detonación.
+- El puntaje de las Hazañas objetivas se guarda en cada acusación y el grupo
+  vota a favor o en contra de ese total. Cambiar el catálogo no cambia puntajes
+  de acusaciones anteriores.
 
 Estas reglas están centralizadas en la función SQL `cast_achievement_vote`.
 
@@ -107,7 +116,7 @@ Valentin Pino puede eliminar cualquiera (permiso asociado a su ID estable).
 La operación elimina los votos y revierte los puntos de una votación aprobada
 en una sola transacción. La función solo está disponible para el servidor.
 
-En las Hazañas con puntaje variable, «A FAVOR» abre un modal que exige elegir
+En las Hazañas Custom, «A FAVOR» abre un modal que exige elegir
 el puntaje antes de confirmar. `pnpm test:hazanas` comprueba permisos, eliminación,
 reversión de OVR y promedio sin modificar la base real.
 
@@ -144,3 +153,13 @@ subida.
 
 `pnpm test:tarts` comprueba la rotación, la prioridad de imágenes nuevas, el
 contador diario, los permisos y la validación de archivos, sin tocar la base real.
+
+### Catálogo y formularios interactivos
+
+Aplicar `supabase/migrations/20261109033201_interactive_achievements.sql` antes de
+publicar los formularios interactivos. La migración conserva entradas retiradas
+para las votaciones anteriores, fija sus puntajes y valida los nuevos totales
+en un trigger de inserción. No modifica los eventos de puntaje existentes.
+`pnpm test:achievement-scoring` prueba todas las combinaciones permitidas,
+el piso de cero del after, ambos rangos Custom y la compatibilidad histórica
+en PostgreSQL embebido, sin modificar el proyecto real.
