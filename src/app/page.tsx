@@ -20,7 +20,7 @@ export default async function HomePage() {
       <section className="overflow-hidden rounded-[1.6rem] border border-[#3d3448] bg-gradient-to-br from-[#332443] via-[#1b1724] to-[#111319] p-6 shadow-2xl">
         <div className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.15em] text-[#cabde0]"><MapPin size={15} className="text-[var(--gold)]" /> Florianópolis, Brasil</div>
         <h1 className="display mt-5">Tartópolis<br /><span className="text-[var(--gold)]">2027</span></h1>
-        <div className="mt-6 flex items-center gap-2 text-xs font-bold text-[#c1b9ca]"><CalendarDays size={15} /> 22 de enero · 16:00</div>
+        <div className="mt-6 flex items-center gap-2 text-sm font-bold text-[#c1b9ca]"><CalendarDays size={17} /> 22 de Enero</div>
         <div className="mt-5"><Countdown /></div>
       </section>
 
@@ -46,7 +46,7 @@ export default async function HomePage() {
 
       <section className="card p-5">
         <div className="flex items-center justify-between">
-          <div>{participant && <p className="eyebrow">Podio actual</p>}<h2 className="mt-1 text-xl font-black uppercase tracking-tight">{participant ? "Los que mandan" : "RANKING"}</h2></div>
+          <div><h2 className="text-xl font-black uppercase tracking-tight">{participant ? "Podio Actual" : "RANKING"}</h2></div>
           <Trophy className="text-[var(--gold)]" />
         </div>
         <div className="mt-5 space-y-2">

@@ -17,10 +17,10 @@ export default async function ParticipantPage({ params }: { params: Promise<{ sl
       <Link href="/ranking" className="mb-5 inline-flex items-center gap-2 text-sm font-bold text-[var(--muted)]"><ArrowLeft size={17} /> Volver al ranking</Link>
       <div className="card flex items-center gap-4 p-5">
         <OvrBadge value={participant.ovr} />
-        <div className="min-w-0"><p className="eyebrow">Perfil de jugador</p><h1 className="truncate text-3xl font-black uppercase tracking-[-0.05em]">{participant.nickname}</h1><p className="mt-1 text-sm text-[var(--muted)]">{participant.full_name}</p></div>
+        <div className="min-w-0"><h1 className="truncate text-3xl font-black uppercase tracking-[-0.05em]">{participant.nickname}</h1><p className="mt-1 text-sm text-[var(--muted)]">{participant.full_name}</p></div>
       </div>
 
-      <div className="mt-7 flex items-end justify-between"><div><p className="eyebrow">Registro completo</p><h2 className="mt-1 text-2xl font-black uppercase tracking-tight">Historial de Hazañas</h2></div><span className="text-xs font-bold text-[var(--muted)]">{Math.max(0, events.length - 1)} {Math.max(0, events.length - 1) === 1 ? "movimiento" : "movimientos"}</span></div>
+      <h2 className="mt-7 text-2xl font-black uppercase tracking-tight">Historial de Hazañas</h2>
       <div className="relative mt-5 space-y-3 before:absolute before:bottom-5 before:left-[1.15rem] before:top-5 before:w-px before:bg-[#303440]">
         {events.map((event) => {
           const initial = event.source_kind === "initial";
