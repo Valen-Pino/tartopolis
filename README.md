@@ -79,6 +79,7 @@ pnpm typecheck
 pnpm test:accounts
 pnpm test:hazanas
 pnpm test:achievement-scoring
+pnpm test:custom-ranking-history
 pnpm build
 ```
 
@@ -91,8 +92,9 @@ límites de ingreso y permisos. No usa ni modifica la base real.
 - Todos los participantes activos pueden votar, incluidos acusador y acusado.
 - Una Hazaña se aprueba cuando obtiene más de la mitad de los participantes activos.
 - Se rechaza cuando ya no es matemáticamente posible alcanzar esa mayoría.
-- En Custom positiva (+1 a +10) y Custom negativa (-1 a -10), el puntaje final
-  es el promedio redondeado de los puntajes propuestos por los votos favorables.
+- En Custom Positivo (+1 a +10) y Custom Negativo (-1 a -10), quien abre la
+  votación elige el puntaje. Los demás votan a favor o en contra de ese monto.
+  Las votaciones antiguas sin puntaje asignado conservan su promedio de votos.
 - Atraer gente al after se calcula al acusar: `max(0, Minas - Pibes)`.
 - Tarteo (+2), Detonación (+5) y Felattio (+3) admiten Tiene Pau (+10) e
   Infidelidad (+4). De Visitante (+2) solo está disponible en Detonación y
@@ -116,7 +118,7 @@ Valentin Pino puede eliminar cualquiera (permiso asociado a su ID estable).
 La operación elimina los votos y revierte los puntos de una votación aprobada
 en una sola transacción. La función solo está disponible para el servidor.
 
-En las Hazañas Custom, «A FAVOR» abre un modal que exige elegir
+En las Hazañas antiguas sin puntaje asignado, «A FAVOR» abre un modal que exige elegir
 el puntaje antes de confirmar. `pnpm test:hazanas` comprueba permisos, eliminación,
 reversión de OVR y promedio sin modificar la base real.
 
@@ -163,3 +165,13 @@ en un trigger de inserción. No modifica los eventos de puntaje existentes.
 `pnpm test:achievement-scoring` prueba todas las combinaciones permitidas,
 el piso de cero del after, ambos rangos Custom y la compatibilidad histórica
 en PostgreSQL embebido, sin modificar el proyecto real.
+
+### Puntaje Custom e historial
+
+`20261109041008_custom_points_and_history.sql` agrega la validación del puntaje
+Custom elegido al acusar y las correcciones históricas solicitadas. No cambia
+los votos ni los puntos resueltos de votaciones anteriores. Los eventos importados
+se identifican por participante y `source_key`; no se modifican los puntos base.
+El ranking comparte el puesto entre puntajes iguales (1, 2, 2, 4), también en home.
+`pnpm test:custom-ranking-history` verifica estas reglas y la preservación
+de registros históricos ajenos a las correcciones.

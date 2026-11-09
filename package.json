@@ -12,7 +12,8 @@
     "test:accounts": "node scripts/test-accounts.mjs",
     "test:hazanas": "node scripts/test-hazanas.mjs",
     "test:tarts": "node scripts/test-tarts.mjs",
-    "test:achievement-scoring": "node scripts/test-achievement-scoring.mjs"
+    "test:achievement-scoring": "node scripts/test-achievement-scoring.mjs",
+    "test:custom-ranking-history": "node scripts/test-custom-ranking-history.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.112.3",

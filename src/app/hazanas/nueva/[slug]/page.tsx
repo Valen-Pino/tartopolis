@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { notFound } from "next/navigation";
+import { catalogPointsLabel } from "@/lib/achievement-scoring";
 import { ClaimForm } from "@/components/claim-form";
 import { requireParticipant } from "@/lib/auth";
 import { getAchievements, getParticipants } from "@/lib/data";
@@ -11,9 +12,7 @@ export default async function NewClaimPage({ params }: { params: Promise<{ slug:
   const [achievements, participants] = await Promise.all([getAchievements(), getParticipants()]);
   const achievement = achievements.find((item) => item.slug === slug);
   if (!achievement) notFound();
-  const pointText = achievement.slug === "atraer-after" ? "Variable" : achievement.score_mode === "fixed"
-    ? `${(achievement.fixed_points ?? 0) > 0 ? "+" : ""}${achievement.fixed_points} OVR`
-    : `${achievement.minimum_points} a ${(achievement.maximum_points ?? 0) > 0 ? "+" : ""}${achievement.maximum_points} OVR`;
+  const pointText = catalogPointsLabel(achievement);
 
   return (
     <section className="pb-3 pt-2">

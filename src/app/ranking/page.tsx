@@ -11,16 +11,16 @@ export default async function RankingPage() {
 
   return (
     <section className="pb-3">
-      <PageHeading eyebrow="Leaderboard" title="Ranking OVR" description="Cada punto tiene una historia. Tocá un participante para ver todas sus Hazañas." />
+      <PageHeading title="RANKING" description="Cada punto tiene una historia. Tocá un participante para ver todas sus Hazañas." />
       <div className="space-y-2">
-        {ranking.map((participant, index) => (
+        {ranking.map((participant) => (
           <Link
             href={`/ranking/${participant.slug}`}
             key={participant.id}
             className={`card flex items-center gap-3 p-3 ${participant.id === viewer.id ? "border-[#655574] bg-[#1d1824]" : ""}`}
           >
             <div className="grid w-8 shrink-0 place-items-center">
-              {index === 0 ? <Crown size={21} className="text-[var(--gold)]" fill="currentColor" /> : <span className="font-black text-[#6f7481]">{index + 1}</span>}
+              {participant.position === 1 ? <Crown size={21} className="text-[var(--gold)]" fill="currentColor" /> : <span className="font-black text-[#6f7481]">{participant.position}</span>}
             </div>
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2"><p className="truncate text-lg font-black uppercase tracking-tight">{participant.nickname}</p>{participant.id === viewer.id && <span className="rounded bg-[#332840] px-1.5 py-0.5 text-[0.55rem] font-black uppercase text-[#cbb8e4]">Vos</span>}</div>

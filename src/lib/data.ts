@@ -1,3 +1,4 @@
+import { withRankPositions } from "@/lib/ranking";
 import { createAdminClient } from "@/lib/supabase/admin";
 import type {
   Achievement,
@@ -14,7 +15,7 @@ export async function getRanking() {
     .order("ovr", { ascending: false })
     .order("nickname", { ascending: true });
   if (error) throw error;
-  return (data ?? []) as RankingParticipant[];
+  return withRankPositions((data ?? []) as RankingParticipant[]);
 }
 
 export async function getParticipantProfile(slug: string) {

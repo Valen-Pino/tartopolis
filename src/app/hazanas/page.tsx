@@ -3,12 +3,8 @@ import { ArrowRight, Sparkles } from "lucide-react";
 import { ClaimCard } from "@/components/claim-card";
 import { PageHeading } from "@/components/page-heading";
 import { requireParticipant } from "@/lib/auth";
+import { catalogPointsLabel } from "@/lib/achievement-scoring";
 import { getAchievements, getClaims } from "@/lib/data";
-
-function pointsLabel(fixed: number | null, minimum: number | null, maximum: number | null) {
-  if (fixed !== null) return `${fixed > 0 ? "+" : ""}${fixed}`;
-  return `${(minimum ?? 0) > 0 ? "+" : ""}${minimum}…${(maximum ?? 0) > 0 ? "+" : ""}${maximum}`;
-}
 
 const notices: Record<string, string> = {
   claim: "No pudimos crear la votación. Revisá el participante y la descripción.",
@@ -30,7 +26,7 @@ export default async function AchievementsPage({
 
   return (
     <section className="pb-3">
-      <PageHeading eyebrow="OVR en juego" title="Hazañas" description="Señalá una acción, elegí a quién corresponde y dejá que el grupo dé su veredicto." />
+      <PageHeading title="Hazañas" description="Señalá una acción, elegí a quién corresponde y dejá que el grupo dé su veredicto." />
 
       {query.error && notices[query.error] && (
         <p className="mb-5 rounded-xl border border-red-900/70 bg-red-950/35 p-4 text-sm font-bold text-red-200">
@@ -51,11 +47,11 @@ export default async function AchievementsPage({
       )}
 
       <div>
-        <div className="mb-4"><p className="eyebrow">Catálogo oficial</p><h2 className="mt-1 text-2xl font-black uppercase tracking-tight">Asignar una Hazaña</h2></div>
+        <div className="mb-4"><h2 className="mt-1 text-2xl font-black uppercase tracking-tight">Asignar una Hazaña</h2></div>
         <div className="space-y-2">
           {achievements.map((achievement) => (
             <Link key={achievement.id} href={`/hazanas/nueva/${achievement.slug}`} className="card flex items-center gap-3 p-4">
-              <div className={`grid h-11 w-14 shrink-0 place-items-center rounded-lg text-sm font-black ${achievement.polarity === "positive" ? "bg-[#173725] text-[var(--green)]" : "bg-[#411f25] text-[var(--red)]"}`}>{achievement.slug === "atraer-after" ? "Variable" : pointsLabel(achievement.fixed_points, achievement.minimum_points, achievement.maximum_points)}</div>
+              <div className={`grid h-11 w-14 shrink-0 place-items-center rounded-lg text-sm font-black ${achievement.polarity === "positive" ? "bg-[#173725] text-[var(--green)]" : "bg-[#411f25] text-[var(--red)]"}`}>{catalogPointsLabel(achievement)}</div>
               <div className="min-w-0 flex-1"><p className="font-black uppercase tracking-tight">{achievement.title}</p></div>
               <ArrowRight size={17} className="shrink-0 text-[#626876]" />
             </Link>

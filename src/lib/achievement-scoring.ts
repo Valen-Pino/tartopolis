@@ -1,4 +1,5 @@
 export type ScoringInputs = {
+  points?: number;
   women?: number;
   men?: number;
   visiting?: boolean;
@@ -34,4 +35,13 @@ export function calculatePoints(slug: string, inputs: ScoringInputs, fixed: numb
 
 export function formatPoints(points: number) {
   return `${points > 0 ? "+" : ""}${points}`;
+}
+
+export function isCustom(slug: string) {
+  return slug === "custom-positiva" || slug === "custom-negativa";
+}
+
+export function catalogPointsLabel(achievement: { slug: string; polarity: string; fixed_points: number | null }) {
+  if (achievement.slug === "atraer-after" || isCustom(achievement.slug)) return achievement.polarity === "positive" ? "+" : "-";
+  return formatPoints(achievement.fixed_points ?? 0);
 }

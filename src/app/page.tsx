@@ -12,8 +12,8 @@ export default async function HomePage() {
   const [rankingResult, claims] = await Promise.all([getRanking().catch(() => null), participant ? getClaims(participant.id) : Promise.resolve([])]);
   const ranking = rankingResult ?? [];
   const pending = claims.filter((claim) => claim.status === "pending");
-  const myPosition = ranking.findIndex((item) => item.id === participant?.id) + 1;
   const me = ranking.find((item) => item.id === participant?.id);
+  const myPosition = me?.position ?? 0;
 
   return (
     <div className="space-y-5 pb-2">
@@ -32,7 +32,7 @@ export default async function HomePage() {
         <Link href="/hazanas" className="card p-4">
           <div className="grid h-12 w-12 place-items-center rounded-xl bg-[#282032] text-[var(--violet)]"><Sparkles /></div>
           <p className="mt-3 text-3xl font-black">{pending.length}</p>
-          <p className="text-xs font-bold text-[var(--muted)]">votaciones abiertas</p>
+          <p className="text-xs font-bold text-[var(--muted)]">{pending.length === 1 ? "Votación abierta" : "Votaciones abiertas"}</p>
         </Link>
       </section> : <section className="card p-5">
         <p className="eyebrow">El viaje ya se juega</p>
@@ -46,14 +46,14 @@ export default async function HomePage() {
 
       <section className="card p-5">
         <div className="flex items-center justify-between">
-          <div><p className="eyebrow">{participant ? "Podio actual" : "Leaderboard"}</p><h2 className="mt-1 text-xl font-black uppercase tracking-tight">{participant ? "Los que mandan" : "Ranking OVR"}</h2></div>
+          <div>{participant && <p className="eyebrow">Podio actual</p>}<h2 className="mt-1 text-xl font-black uppercase tracking-tight">{participant ? "Los que mandan" : "RANKING"}</h2></div>
           <Trophy className="text-[var(--gold)]" />
         </div>
         <div className="mt-5 space-y-2">
           {!rankingResult && <p role="status" className="rounded-xl bg-black/20 p-3 text-sm text-[var(--muted)]">El ranking no está disponible en este momento. Volvé a intentar en unos minutos.</p>}
-          {(participant ? ranking.slice(0, 3) : ranking).map((item, index) => (
+          {(participant ? ranking.slice(0, 3) : ranking).map((item) => (
             <Link key={item.id} href={participant ? `/ranking/${item.slug}` : "/acceso"} className="flex items-center gap-3 rounded-xl bg-black/20 p-3">
-              <span className="w-5 text-center text-sm font-black text-[#777d8b]">{index + 1}</span>
+              <span className="w-5 text-center text-sm font-black text-[#777d8b]">{item.position}</span>
               <div className="min-w-0 flex-1"><p className="truncate font-black uppercase">{item.nickname}</p><p className="truncate text-xs text-[var(--muted)]">{item.full_name}</p></div>
               <span className="text-lg font-black text-[var(--gold)]">{item.ovr}</span>
             </Link>

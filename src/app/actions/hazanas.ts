@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { requireParticipant } from "@/lib/auth";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { hasAdditionalPoints, optionsFor, type ScoringInputs } from "@/lib/achievement-scoring";
+import { hasAdditionalPoints, isCustom, optionsFor, type ScoringInputs } from "@/lib/achievement-scoring";
 import { canDeleteClaim } from "@/lib/claim-permissions";
 
 const postgresUuid = z.string().regex(
@@ -31,12 +31,17 @@ export async function createClaim(formData: FormData) {
   const supabase = createAdminClient();
   const [{ count }, { data: achievement }] = await Promise.all([
     supabase.from("participants").select("id", { count: "exact", head: true }).eq("is_active", true),
-    supabase.from("achievements").select("id, slug").eq("id", result.data.achievementId).eq("is_active", true).single(),
+    supabase.from("achievements").select("id, slug, minimum_points, maximum_points").eq("id", result.data.achievementId).eq("is_active", true).single(),
   ]);
   if (!achievement) redirect("/hazanas?error=achievement");
 
   const scoringInputs: ScoringInputs = {};
-  if (achievement.slug === "atraer-after") {
+  if (isCustom(achievement.slug)) {
+    const value = formData.get("customPoints");
+    const points = typeof value === "string" && /^-?\d{1,2}$/.test(value) ? Number(value) : NaN;
+    if (!Number.isInteger(points) || points < achievement.minimum_points || points > achievement.maximum_points) redirect("/hazanas?error=claim");
+    scoringInputs.points = points;
+  } else if (achievement.slug === "atraer-after") {
     for (const key of ["women", "men"] as const) {
       const value = formData.get(key);
       if (typeof value !== "string" || !/^\d{1,7}$/.test(value) || Number(value) > 1000000) {

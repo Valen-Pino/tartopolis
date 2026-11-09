@@ -11,7 +11,7 @@ export function ClaimControls({ claim, mode }: { claim: Claim; mode: "vote" | "d
   const [busy, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const achievement = claim.achievement;
-  const range = achievement.score_mode === "range";
+  const range = achievement.score_mode === "range" && claim.assigned_points === null;
   const negative = achievement.polarity === "negative";
   const values = range ? Array.from(
     { length: (achievement.maximum_points ?? 0) - (achievement.minimum_points ?? 0) + 1 },

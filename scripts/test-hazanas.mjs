@@ -17,6 +17,8 @@ try {
   const migrationDir = new URL("../supabase/migrations/", import.meta.url);
   const interactiveMigration = (await readdir(migrationDir)).find((name) => name.endsWith("_interactive_achievements.sql"));
   await db.exec(await readFile(new URL(interactiveMigration, migrationDir), "utf8"));
+  const customMigration = (await readdir(migrationDir)).find((name) => name.endsWith("_custom_points_and_history.sql"));
+  await db.exec(await readFile(new URL(customMigration, migrationDir), "utf8"));
   for (const [id, name] of [[CLAIM_MODERATOR_ID, "Pino"], [owner, "Creador"], [other, "Otro"]]) {
     await db.query("insert into participants(id, full_name, nickname, slug) values ($1,$2,$2,$2)", [id, name]);
   }

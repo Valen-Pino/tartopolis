@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useFormStatus } from "react-dom";
 import { createClaim } from "@/app/actions/hazanas";
-import { calculatePoints, formatPoints, optionsFor, type ScoringInputs } from "@/lib/achievement-scoring";
+import { calculatePoints, formatPoints, isCustom, optionsFor, type ScoringInputs } from "@/lib/achievement-scoring";
 import type { Achievement, Participant } from "@/lib/types";
 
 function SubmitButton() {
@@ -14,6 +14,7 @@ function SubmitButton() {
 export function ClaimForm({ achievement, participants }: { achievement: Achievement; participants: Participant[] }) {
   const [inputs, setInputs] = useState<ScoringInputs>({ women: 0, men: 0 });
   const options = optionsFor(achievement.slug);
+  const custom = isCustom(achievement.slug);
   const after = achievement.slug === "atraer-after";
   const points = calculatePoints(achievement.slug, inputs, achievement.fixed_points ?? 0);
   return <form action={createClaim} className="mt-7 space-y-5">
@@ -25,6 +26,11 @@ export function ClaimForm({ achievement, participants }: { achievement: Achievem
         {participants.map((item) => <option key={item.id} value={item.id}>{item.nickname}</option>)}
       </select>
     </div>
+    {custom && <div>
+      <label htmlFor="customPoints" className="text-xs font-black uppercase tracking-wider text-[#b9bdc8]">Puntaje</label>
+      <input className="field mt-2" id="customPoints" name="customPoints" type="number" inputMode={achievement.polarity === "negative" ? undefined : "numeric"}
+        min={achievement.minimum_points ?? undefined} max={achievement.maximum_points ?? undefined} step={1} required />
+    </div>}
     {after && <div className="grid grid-cols-2 gap-3">
       {([{ key: "women", label: "Minas" }, { key: "men", label: "Pibes" }] as const).map(({ key, label }) => <div key={key}>
         <label htmlFor={key} className="text-sm font-bold">{label}</label>
