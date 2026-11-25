@@ -17,6 +17,7 @@ try {
     create table participants (id uuid primary key);`);
   await db.query("insert into participants values ($1)", [owner]);
   await db.exec(await readFile(new URL("../supabase/migrations/003_daily_tart.sql", import.meta.url), "utf8"));
+  await db.exec(await readFile(new URL("../supabase/migrations/20261125210652_daily_tart_rotation_gap.sql", import.meta.url), "utf8"));
   assert.equal((await scalar("select public from storage.buckets")).public, false);
   assert.equal(await pick("2026-11-01"), undefined, "un día vacío no queda fijado");
   const first = await add("one.webp");
@@ -51,6 +52,21 @@ try {
   const only = await add("only.webp");
   assert.equal((await pick("2026-12-01")).image_id, only);
   assert.equal((await pick("2026-12-02")).image_id, only, "una sola imagen sigue disponible al día siguiente");
+
+  await db.exec("truncate daily_tarts, tart_images");
+  const atTwo = await add("at-two.webp");
+  await add("at-four.webp");
+  await db.query("update tart_images set times_selected = case when id = $1 then 2 else 4 end", [atTwo]);
+  const newImages = [await add("new-a.webp"), await add("new-b.webp")];
+  for (const day of ["2026-12-03", "2026-12-04"]) {
+    const winner = (await pick(day)).image_id;
+    assert.ok(newImages.includes(winner), "una foto en cero tiene prioridad");
+    assert.equal((await scalar("select times_selected::int as n from tart_images where id=$1", [winner])).n, 2,
+      "salta de 0 a 2, incluso con otro 0 y un 4 disponibles");
+    assert.equal((await pick(day)).image_id, winner);
+    newImages.splice(newImages.indexOf(winner), 1);
+  }
+  assert.deepEqual((await db.query("select times_selected::int as n from tart_images order by n")).rows.map(({ n }) => n), [2, 2, 2, 4]);
 
   const png = await sharp({ create: { width: 20, height: 30, channels: 3, background: "red" } }).png().toBuffer();
   const normalized = await prepareTartImage(png);

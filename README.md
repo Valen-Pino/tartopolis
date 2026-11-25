@@ -147,8 +147,9 @@ recuperar el foco.
 
 La elección usa el menor contador de selecciones y desempata al azar, excluyendo
 la imagen de ayer cuando hay otra disponible. Esta exclusión tiene prioridad
-sobre el contador si las imágenes nuevas generan contadores desparejos. Cada
-elección suma uno; las visitas no lo modifican. Las subidas comienzan en cero.
+sobre el contador si las imágenes nuevas generan contadores desparejos. El contador de la imagen elegida sube al menor valor estrictamente mayor que
+el suyo, ignorando empates. Si no hay un valor mayor, suma uno. Las visitas no
+lo modifican. Las subidas comienzan en cero.
 Un bloqueo dentro de la transacción evita elecciones distintas por solicitudes
 simultáneas. Si aún no hay imágenes, el día queda disponible para la primera
 subida.
